@@ -1,0 +1,28 @@
+[package]
+name = "dci"
+version = "0.1.0"
+license = "MIT"
+edition = "2018"
+authors = ["gahag <gabriel.s.b@live.com>"]
+description = "DCI-Closed, a frequent closed itemset mining algorithm, implemented in Rust"
+repository = "https://github.com/gahag/dci"
+readme = "readme.md"
+keywords = [ "dci", "dci-closed", "frequent-itemset", "itemset-mining", "descriptive-learning" ]
+categories = [ "science", "concurrency" ]
+
+[dev-dependencies]
+lazy_static = "1.4"
+
+[dependencies]
+rayon = { version = "1.4", optional = true }
+bitvec = { version = "0.19", optional = true }
+bitmatrix = { version = "0.1", optional = true }
+
+[features]
+default = ["sequential", "parallel"]
+sequential = []
+parallel = ["rayon"]
+matrix = ["bitmatrix", "bitvec"]
+
+[package.metadata.docs.rs]
+features = [ "sequential", "parallel", "matrix" ]
