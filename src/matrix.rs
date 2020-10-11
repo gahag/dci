@@ -94,3 +94,17 @@ impl<I> From<BitMatrix> for Matrix<I> {
 		Matrix(matrix, PhantomData)
 	}
 }
+
+
+impl<I> Into<BitMatrix> for Matrix<I> {
+	fn into(self) -> BitMatrix {
+		self.0
+	}
+}
+
+
+impl<'a, I> Into<&'a BitMatrix> for &'a Matrix<I> {
+	fn into(self) -> &'a BitMatrix {
+		&self.0
+	}
+}
