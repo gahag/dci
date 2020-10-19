@@ -22,6 +22,7 @@ where
 {
 	let result: HashSet<(D::ItemSet, Support)> = crate::sequential
 		::closed(&dataset.dataset, dataset.min_sup)
+		.into_vec() // Boxed slice has no owned iterator.
 		.into_iter()
 		.collect();
 
@@ -38,6 +39,7 @@ where
 {
 	let result: HashSet<(D::ItemSet, Support)> = crate::parallel
 		::closed(&dataset.dataset, dataset.min_sup)
+		.into_vec() // Boxed slice has no owned iterator.
 		.into_iter()
 		.collect();
 

@@ -16,7 +16,7 @@ use crate::{
 /// # Panics
 /// This should never really panic, but it might happen if something really bad happens with
 /// Rayon or the spawned tasks.
-pub fn closed<D>(dataset: &D, min_sup: usize) -> Vec<(D::ItemSet, Support)>
+pub fn closed<D>(dataset: &D, min_sup: usize) -> Box<[(D::ItemSet, Support)]>
 where
 	D: DataSet + Sync,
 	D::ItemSet: Send + Sync,
@@ -27,13 +27,16 @@ where
 
 	let InitialSets { closed, pre, post } = InitialSets::new(dataset, min_sup);
 
+	let closed_set = closed.clone();
+	let transactions_count = dataset.transactions_count();
+
 	let (tx, rx) = std::sync::mpsc::sync_channel(CHANNEL_BOUND);
 
 	let collector = std::thread::spawn(
-		move || -> Vec<(D::ItemSet, Support)> { // Should never panic.
+		move || -> Box<[(D::ItemSet, Support)]> { // Should never panic.
 			let mut vec = Vec::new();
 			vec.extend(rx.iter());
-			vec
+			vec.into_boxed_slice()
 		}
 	);
 

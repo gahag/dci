@@ -11,7 +11,7 @@ use crate::{
 
 /// Sequential implementation of the DCI-Closed algorithm. This is a straightforward
 /// implementation of the original algorithm from the paper. It uses only one CPU core.
-pub fn closed<D>(dataset: &D, min_sup: usize) -> Vec<(D::ItemSet, Support)>
+pub fn closed<D>(dataset: &D, min_sup: usize) -> Box<[(D::ItemSet, Support)]>
 where
 	D: DataSet,
 	for<'b> &'b D::ItemSet: IntoIterator<Item = usize>
@@ -29,7 +29,7 @@ where
 		&mut closed_itemsets
 	);
 
-	closed_itemsets
+	closed_itemsets.into_boxed_slice()
 }
 
 
