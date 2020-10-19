@@ -13,6 +13,9 @@ use crate::{
 /// adaptation of the original algorithm from the paper, using Rayon. It should use all the
 /// CPU cores.
 ///
+/// The returned collection will **always** have at least one element, with maximum support:
+/// the set of all elements which occur in all transactions.
+///
 /// # Panics
 /// This should never really panic, but it might happen if something really bad happens with
 /// Rayon or the spawned tasks.
@@ -34,7 +37,7 @@ where
 
 	let collector = std::thread::spawn(
 		move || -> Box<[(D::ItemSet, Support)]> { // Should never panic.
-			let mut vec = Vec::new();
+			let mut vec = vec![(closed_set, transactions_count)];
 			vec.extend(rx.iter());
 			vec.into_boxed_slice()
 		}

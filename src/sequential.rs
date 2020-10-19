@@ -11,6 +11,9 @@ use crate::{
 
 /// Sequential implementation of the DCI-Closed algorithm. This is a straightforward
 /// implementation of the original algorithm from the paper. It uses only one CPU core.
+///
+/// The returned collection will **always** have at least one element, with maximum support:
+/// the set of all elements which occur in all transactions.
 pub fn closed<D>(dataset: &D, min_sup: usize) -> Box<[(D::ItemSet, Support)]>
 where
 	D: DataSet,
@@ -18,7 +21,10 @@ where
 {
 	let InitialSets { closed, pre, post } = InitialSets::new(dataset, min_sup);
 
-	let mut closed_itemsets = Vec::new();
+	let closed_set = closed.clone();
+	let transactions_count = dataset.transactions_count();
+
+	let mut closed_itemsets = vec![(closed_set, transactions_count)];
 
 	_closed(
 		dataset,

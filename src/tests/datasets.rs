@@ -47,6 +47,7 @@ lazy_static! {
 			([1, 2].iter().copied().into(), 2),
 			([0].iter().copied().into(), 3),
 			([2].iter().copied().into(), 5),
+			([].iter().copied().into(), 6),
 		]
 			.iter()
 			.cloned()
